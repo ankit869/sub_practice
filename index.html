@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subtraction Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s ease;
+        }
+        #container {
+            margin: 0 auto;
+            width: 300px;
+            text-align: center;
+        }
+        .problem {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #timer {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        #checkAnswers, #toggleDarkMode, #refreshQuestions {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div id="container">
+
+        <div id="problems"></div>
+        <button id="checkAnswers">Check Answers</button>
+ 
+        <button id="refreshQuestions">Refresh Questions</button>
+         <br> <br>
+        <label for="digits">Digits:</label>
+       
+        <select id="digits">
+            <option value="10">1-10</option>
+            <option value="100">1-100</option>
+            <option value="1000">1-1000</option>
+            <option value="10000">1-10000</option>
+        </select>
+    </div>
+    <script>
+        var problems = [];
+		var correct = 0;
+        function generateProblems() {
+            problems = [];
+            var digits = document.getElementById('digits').value;
+            for(var i = 0; i < 10; i++) {
+                var num1 = Math.floor(Math.random() * digits);
+                var num2 = Math.floor(Math.random() * digits);
+                if(num2 > num1) {
+                    var temp = num1;
+                    num1 = num2;
+                    num2 = temp;
+                }
+                problems.push({problem: num1 + " - " + num2 + " = ?", answer: num1 - num2});
+            }
+            var problemsDiv = document.getElementById('problems');
+            problemsDiv.innerHTML = '';
+            problems.forEach(function(problem, index) {
+                var problemDiv = document.createElement('div');
+                problemDiv.className = 'problem';
+                problemDiv.innerHTML = '<div>' + problem.problem + '</div><input type="text" id="answer' + index + '" placeholder="Your answer here">';
+                problemsDiv.appendChild(problemDiv);
+            });
+        }
+
+        generateProblems();
+
+        document.getElementById('checkAnswers').addEventListener('click', function() {
+            correct = 0
+            incorrect=""
+            problems.forEach(function(problem, index) {
+                var userAnswer = document.getElementById('answer' + index).value;
+                if(userAnswer == problem.answer) {
+                    correct++;
+                }
+                else{
+                    incorrect+=" "+`${index+1}`;
+                }
+            });
+            alert('You got ' + correct + ' out of 10 correct!, incorrect- '+incorrect);
+        });
+
+        document.getElementById('refreshQuestions').addEventListener('click', function() {
+            generateProblems();
+            correct = 0;
+        });
+    </script>
+</body>
+</html>
